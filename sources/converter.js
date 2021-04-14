@@ -8,4 +8,8 @@ function formatDate(date) {
   }
 }
 
-module.exports = {formatDate}
+function formatDateFromDays(days) {
+  return formatDate(new Date(0, 0, days));
+}
+
+module.exports = {formatDate, formatDateFromDays}

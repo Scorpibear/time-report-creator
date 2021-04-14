@@ -5,20 +5,15 @@ const converter = require("./converter");
 function readSettings(settingsFile, settingsSheet) {
   let settingsWorkbook = null;
   try{
-    settingsWorkbook = XLSX.readFile(settingsFile, {
-      type: 'binary',
-      cellDates: true,
-      cellNF: false,
-      cellText: false
-    });
+    settingsWorkbook = XLSX.readFile(settingsFile);
   } catch (e) {
     console.error('Could not read the file', e);
     return;
   }
   const settingsData = XLSX.utils.sheet_to_json(settingsWorkbook.Sheets[settingsSheet]);
   settingsData.timeFileName = settingsData[0].File + ".xlsx";
-  settingsData.startDate = converter.formatDate(settingsData[0].Start);
-  settingsData.endDate = converter.formatDate(settingsData[0].End);
+  settingsData.startDate = converter.formatDateFromDays(settingsData[0].Start);
+  settingsData.endDate = converter.formatDateFromDays(settingsData[0].End);
   return settingsData;
 }
 

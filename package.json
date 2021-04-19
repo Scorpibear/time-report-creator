@@ -1,12 +1,13 @@
 {
   "name": "time-to-bill",
   "version": "0.0.1",
-  "description": "time to billing report",
+  "description": "time to billing report creator",
   "main": "main.js",
   "scripts": {
     "test": "jest",
     "start": "node main.js",
-    "tdd": "jest --watchAll"
+    "tdd": "jest --watchAll",
+    "clean": "rm *_report.xlsx"
   },
   "author": "",
   "license": "Apache-2.0",

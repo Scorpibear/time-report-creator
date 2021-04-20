@@ -1,7 +1,7 @@
 {
-  "name": "time-to-bill",
+  "name": "time-splitter",
   "version": "0.0.1",
-  "description": "time to billing report creator",
+  "description": "time reports splitter by tags",
   "main": "main.js",
   "scripts": {
     "test": "jest",

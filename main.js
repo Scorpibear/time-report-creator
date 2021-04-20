@@ -7,9 +7,8 @@ const settingsSheet = "Settings";
 const settings = reader.readSettings(settingsFile, settingsSheet);
 
 console.log(settings.timeFileName, settings.startDate, settings.endDate);
+console.log(settings.projectsData);
 
 const timeData = reader.readTimeBook(settings.timeFileName);
 
-//console.log(timeData);
-
-settings.forEach(projectSettings => reportCreator.createReport(projectSettings, settings, timeData));
+settings.projectsData.forEach(project => reportCreator.createReport(project, timeData));

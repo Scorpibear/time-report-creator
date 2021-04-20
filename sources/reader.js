@@ -11,10 +11,17 @@ function readSettings(settingsFile, settingsSheet) {
     return;
   }
   const settingsData = XLSX.utils.sheet_to_json(settingsWorkbook.Sheets[settingsSheet]);
-  settingsData.timeFileName = settingsData[0].File + ".xlsx";
-  settingsData.startDate = converter.formatDateFromDays(settingsData[0].Start);
-  settingsData.endDate = converter.formatDateFromDays(settingsData[0].End);
-  return settingsData;
+  console.log('SettingsData:', settingsData);
+  const settings = {};
+  settings.timeFileName = settingsData[0].File + ".xlsx";
+  settings.startDate = converter.formatDateFromDays(settingsData[0].Start);
+  settings.endDate = converter.formatDateFromDays(settingsData[0].End);
+  settings.projects = groupProjects(settingsData);
+  return settings;
+}
+
+function groupProjects(settingsData) {
+  return [];
 }
 
 function readTimeBook(timeFileName) {
@@ -29,4 +36,4 @@ function readTimeBook(timeFileName) {
   return timeData;
 }
 
-module.exports = {readSettings, readTimeBook};
+module.exports = {readSettings, readTimeBook, groupProjects};

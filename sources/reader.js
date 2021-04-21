@@ -21,7 +21,17 @@ function readSettings(settingsFile, settingsSheet) {
 }
 
 function groupProjects(settingsData) {
-  return [];
+  let projects = new Map();
+  settingsData.forEach(({ProjectName, TabName, Tag, LeavePackage}) => {
+    let tabInfo = {tabName: TabName, tag: Tag, leavePackage: LeavePackage};
+    if(projects.has(ProjectName)) {
+      let tabs = projects.get(ProjectName);
+      tabs.push(tabInfo);
+    } else {
+      projects.set(ProjectName, [tabInfo]);
+    }
+  })
+  return projects;
 }
 
 function readTimeBook(timeFileName) {

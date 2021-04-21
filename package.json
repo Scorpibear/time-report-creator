@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest",
     "start": "node main.js",
-    "tdd": "jest --watchAll",
+    "tdd": "jest --watch",
     "clean": "rm *_report.xlsx"
   },
   "author": "",

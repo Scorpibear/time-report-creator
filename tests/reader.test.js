@@ -12,13 +12,19 @@ describe('reader', () => {
     TabName: 'Tab2',
     Tag: 'tagB',
     LeavePackage: 'N'
+  },
+  {
+    ProjectName: 'P33',
+    TabName: 'report',
+    Tag: 'p33_report',
+    LeavePackage: 'Y'
   }];
-  describe('formProjects', () => {
-    test('forms project data in project->tabs format', () => {
+  describe('groupProjects', () => {
+    test('groups project data in project->tabs format', () => {
       const projects = reader.groupProjects(sampleSettings);
-      expect(projects).toHaveProperty('length');
-      expect(projects[0].tabs).toHaveProperty('length');
-      expect(projects[0].tabs[0]).toBe({tabName: 'Tab1', tag: 'tagA', leavePackage: 'N'});
+      expect(projects.has("P11")).toBeTruthy();
+      expect(projects.get("P11")).toHaveProperty('length');
+      expect(projects.get("P11")[0]).toEqual({tabName: 'Tab1', tag: 'tagA', leavePackage: 'N'});
     })
   })
 })

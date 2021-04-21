@@ -1,7 +1,7 @@
 const XLSX = require('xlsx');
 
-function createReport({ProjectName, TabName, Tag, LeavePackage}, settings, timeData) {
-  const reportFileName = `${ProjectName}_${settings.startDate}_${settings.endDate}_report.xlsx`;
+function createReport(projectName, tabs, settings, timeData) {
+  const reportFileName = `${projectName}_${settings.startDate}_${settings.endDate}_report.xlsx`;
   const wb = XLSX.utils.book_new();
 
   // create summary
@@ -12,10 +12,12 @@ function createReport({ProjectName, TabName, Tag, LeavePackage}, settings, timeD
     let referenceToServicePointsSpent = 54;
 
     let ws_data = [
-      [ "Activities",	"Service Points Spent"],
-      [ TabName,	referenceToServicePointsSpent],
-      [ "Total Service Points",	"=SUM(B2:B2)"]
+      [ "Activities",	"Service Points Spent"]
     ];
+    tabs.forEach(tab => {
+      ws_data.push([tab.tabName, referenceToServicePointsSpent])
+    })
+    ws_data.push([ "Total Service Points",	"=SUM(B2:B2)"])
 
     let ws = XLSX.utils.aoa_to_sheet(ws_data);
 
@@ -24,15 +26,23 @@ function createReport({ProjectName, TabName, Tag, LeavePackage}, settings, timeD
   createSummary();
 
   // create tabs
-  let tabs = [TabName];
   
-  function createTab(tab) {
-    let ws_name = tab;
-    const header = ["Employee", "Package", "Activity description", "Date", "Service Points"]
-    let ws_data = [
-      header,
-      timeData.map(data => [data.Employee, data.Package, data["Activity description"], data.Date, data["Service Points"]])
-    ];
+  function createTab(tabInfo) {
+    let ws_name = tabInfo.tabName;
+    const header = ["Employee"];
+    if(tabInfo.leavePackage) {
+      header.push("Package");
+    }
+    header.push("Package", "Activity description", "Date", "Service Points");
+    const propertyMap = {"Service Points": "Hours"};
+    let tabTimeData = timeData.filter(({Tag}) => Tag == tabInfo.tag);
+    let ws_data = [header];
+    tabTimeData.forEach(info => {
+      let row = header.map(property => 
+        propertyMap[property] ? info[propertyMap[property]] : info[property]
+      );
+      ws_data.push(row);
+    });
     let ws = XLSX.utils.aoa_to_sheet(ws_data);
     XLSX.utils.book_append_sheet(wb, ws, ws_name);
   }

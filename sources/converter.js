@@ -1,6 +1,5 @@
 function formatDate(date) {
   try{
-    console.log(date, date.toISOString(), date.toLocaleString());
     return date.toISOString().match(/\d{4}-\d{2}-\d{2}/)[0];
   } catch (e) {
     console.error(`Could not parse date '${date}'`)
@@ -9,7 +8,14 @@ function formatDate(date) {
 }
 
 function formatDateFromDays(days) {
-  return formatDate(new Date(0, 0, days));
+  return formatDate(days2date(days));
 }
 
-module.exports = {formatDate, formatDateFromDays}
+function formatDateToUSFromDays(days) {
+  const date = days2date(days);
+  return date.toLocaleDateString("en-us");
+}
+
+const days2date = days => new Date(0, 0, days);
+
+module.exports = {formatDate, formatDateFromDays, formatDateToUSFromDays}

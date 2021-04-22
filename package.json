@@ -7,7 +7,7 @@
     "test": "jest",
     "start": "node main.js",
     "tdd": "jest --watch",
-    "clean": "rm *_report.xlsx"
+    "clean": "rm *_report.xlsx || del *_report.xlsx"
   },
   "author": "",
   "license": "Apache-2.0",
@@ -20,5 +20,6 @@
   },
   "jest": {
     "collectCoverage": true
-  }
+  },
+  "repository": {"url": "git@github.com:Scorpibear/time-report-creator.git"}
 }

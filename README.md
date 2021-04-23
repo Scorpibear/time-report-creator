@@ -6,7 +6,7 @@
 RICPA client, client for Remote Chess Engine, implemented following RICPA protocol
 
 ## Install
-1. Install the recent node.js LTS version (once)
+1. Install the recent [node.js](https://nodejs.org/en/) LTS version (once)
 2. Run from command line
 ```
 npm install time-report-creator
@@ -15,4 +15,4 @@ npm install time-report-creator
 ## Use
 1. Place initial time export in any xlsx file
 2. Create Splitter_settings.xlsx file with data to be used for split
-3. Run time-report-creator
+3. Run npm run start

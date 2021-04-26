@@ -15,4 +15,13 @@ npm install time-report-creator
 ## Use
 1. Place initial time export in any xlsx file
 2. Create Splitter_settings.xlsx file with data to be used for split
-3. Run npm run start
+3. Type in command prompt:
+```
+npm run start
+```
+
+## Update
+Run from command line:
+```
+npm install time-report-creator@latest
+```

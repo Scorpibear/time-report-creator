@@ -1,12 +1,10 @@
-const XLSX = require('xlsx');
+const XLSX = require('sheetjs-style');
 const converter = require('./converter');
 
 function createReport(projectName, tabs, settings, timeData) {
   const reportFileName = `${projectName}_${settings.startDate}_${settings.endDate}_report.xlsx`;
   const wb = XLSX.utils.book_new();
 
-  // create summary
-  function createSummary() {
     let ws_name = "Summary";
 
     let ws_data = [
@@ -24,20 +22,17 @@ function createReport(projectName, tabs, settings, timeData) {
     ws_data.push([ "Total Service Points",	total])
 
     let ws = XLSX.utils.aoa_to_sheet(ws_data);
+    
+    // apply formatting
+    ["A1", "B1"].forEach(cell => applyHeaderFormat(ws[cell]));
 
     XLSX.utils.book_append_sheet(wb, ws, ws_name);
-  }
-  createSummary();
 
   // create tabs
   
   function createTab(tabInfo) {
     let ws_name = tabInfo.tabName;
-    const header = ["Employee"];
-    if(tabInfo.leavePackage == 'Y') {
-      header.push("Package");
-    }
-    header.push("Activity description", "Date", "Service Points");
+    const header = getHeader(tabInfo.leavePackage == 'Y');
     const propertyMap = {
       "Service Points": (info) => info["Hours"],
       "Date": (info) => converter.formatDateFromDays(info["Date"])
@@ -57,12 +52,30 @@ function createReport(projectName, tabs, settings, timeData) {
     summaryRow.push(tabTimeData.map(data => data["Hours"]).reduce((a, b) => (a + b), 0));
     ws_data.push(summaryRow)
     let ws = XLSX.utils.aoa_to_sheet(ws_data);
+    const headerCells = ["A1","B1","C1","D1"];
+    if(header.length > 4) {
+      headerCells.push("E1");
+    }
+    headerCells.forEach(cell => applyHeaderFormat(ws[cell]));
     XLSX.utils.book_append_sheet(wb, ws, ws_name);
   }
 
   tabs.forEach(createTab);
 
   XLSX.writeFile(wb, reportFileName);
+}
+
+function getHeader(isPackageRequired) {
+  let header = ["Employee"];
+  if(isPackageRequired) {
+    header.push("Package");
+  }
+  header.push("Activity description", "Date", "Service Points");
+  return header;
+}
+
+function applyHeaderFormat(cell) {
+  cell.s = {font: {bold: true}}
 }
 
 module.exports = {createReport};

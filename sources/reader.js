@@ -1,4 +1,4 @@
-const XLSX = require("xlsx");
+const XLSX = require("sheetjs-style");
 
 const converter = require("./converter");
 

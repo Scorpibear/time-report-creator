@@ -5,28 +5,26 @@ function createReport(projectName, tabs, settings, timeData) {
   const reportFileName = `${projectName}_${settings.startDate}_${settings.endDate}_report.xlsx`;
   const wb = XLSX.utils.book_new();
 
-    let ws_name = "Summary";
+  let ws_data = [
+    [ "Activities",	"Service Points Spent"]
+  ];
+  let total = 0;
+  tabs.forEach(tab => {
+    let spent = timeData.filter(({Tag}) => Tag == tab.tag).map(record => record.Hours).reduce((a, b) => (a + b), 0);
+    ws_data.push([tab.tabName, spent]);
+    total+= spent;
+    if(!spent){
+      console.error(`No time spent for project '${projectName}', tab '${tab.tabName}', tag '${tab.tag}'`);
+    }
+  })
+  ws_data.push([ "Total Service Points",	total])
 
-    let ws_data = [
-      [ "Activities",	"Service Points Spent"]
-    ];
-    let total = 0;
-    tabs.forEach(tab => {
-      let spent = timeData.filter(({Tag}) => Tag == tab.tag).map(record => record.Hours).reduce((a, b) => (a + b), 0);
-      ws_data.push([tab.tabName, spent]);
-      total+= spent;
-      if(!spent){
-        console.error(`No time spent for project '${projectName}', tab '${tab.tabName}', tag '${tab.tag}'`);
-      }
-    })
-    ws_data.push([ "Total Service Points",	total])
+  let ws = XLSX.utils.aoa_to_sheet(ws_data);
+  
+  // apply formatting
+  ["A1", "B1"].forEach(cell => applyHeaderFormat(ws[cell]));
 
-    let ws = XLSX.utils.aoa_to_sheet(ws_data);
-    
-    // apply formatting
-    ["A1", "B1"].forEach(cell => applyHeaderFormat(ws[cell]));
-
-    XLSX.utils.book_append_sheet(wb, ws, ws_name);
+  XLSX.utils.book_append_sheet(wb, ws, "Summary");
 
   // create tabs
   

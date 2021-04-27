@@ -1,6 +1,6 @@
 {
   "name": "time-report-creator",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "time report creator using split by tags",
   "main": "main.js",
   "scripts": {
@@ -23,5 +23,9 @@
   },
   "repository": {
     "url": "git@github.com:Scorpibear/time-report-creator.git"
+  },
+  "bin": {
+    "@Scorpibear/time-report-creator": "bin/time-report-creator",
+    "time-report-creator": "bin/time-report-creator"
   }
 }

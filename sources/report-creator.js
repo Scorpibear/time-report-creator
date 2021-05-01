@@ -1,5 +1,8 @@
 const XLSX = require('sheetjs-style');
 const converter = require('./converter');
+const Formatter = require('./formatter');
+
+const formatter = new Formatter();
 
 function createReport(projectName, tabs, settings, timeData) {
   const reportFileName = `${projectName}_${settings.startDate}_${settings.endDate}_report.xlsx`;
@@ -22,7 +25,7 @@ function createReport(projectName, tabs, settings, timeData) {
   let ws = XLSX.utils.aoa_to_sheet(ws_data);
   
   // apply formatting
-  ["A1", "B1"].forEach(cell => applyHeaderFormat(ws[cell]));
+  ["A1", "B1"].forEach(cell => formatter.applyHeaderFormat(ws[cell]));
 
   XLSX.utils.book_append_sheet(wb, ws, "Summary");
 
@@ -39,10 +42,6 @@ function getHeader(isPackageRequired) {
   }
   header.push("Activity description", "Date", "Service Points");
   return header;
-}
-
-function applyHeaderFormat(cell) {
-  cell.s = {font: {bold: true}}
 }
 
 function createTab(tabInfo, timeData, wb) {
@@ -71,7 +70,7 @@ function createTab(tabInfo, timeData, wb) {
   if(header.length > 4) {
     headerCells.push("E1");
   }
-  headerCells.forEach(cell => applyHeaderFormat(ws[cell]));
+  headerCells.forEach(cell => formatter.applyTabsHeaderFormat(ws[cell]));
   XLSX.utils.book_append_sheet(wb, ws, ws_name);
 }
 

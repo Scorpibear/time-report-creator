@@ -9,4 +9,6 @@ describe('report-creator', () => {
     reportCreator.createReport("project name", [], settings, []);
     expect(XLSX.utils.book_new).toBeCalled();
   })
+  test('apply summary row format for the last row on each tab');
+  test('apply summary row format for the last row on the summary');
 })

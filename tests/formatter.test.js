@@ -15,5 +15,12 @@ describe('formatter', () => {
       expect(cell.s.font.name).toEqual('Calibri');
     })
   })
+  describe('applySummaryRowFormat', () => {
+    test('marks it in bold font', () => {
+      const cell = {};
+      formatter.applySummaryRowFormat(cell);
+      expect(cell.s.font.bold).toBeTruthy();
+    })
+  })
   
 })

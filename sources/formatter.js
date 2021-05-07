@@ -1,5 +1,6 @@
 class Formatter {
-  applyHeaderFormat(cell) {
+
+  makeBold(cell) {
     if(!cell.s) {
       cell.s = {}
     }
@@ -7,6 +8,9 @@ class Formatter {
       cell.s.font = {}
     }
     cell.s.font.bold = true
+  }
+  applyHeaderFormat(cell) {
+    this.makeBold(cell)
   }
   
   applyTabsHeaderFormat(cell) {
@@ -18,6 +22,10 @@ class Formatter {
       cell.s.alignment = {}
     }
     cell.s.alignment.horisontal = "center"
+  }
+
+  applySummaryRowFormat(cell) {
+    this.makeBold(cell)
   }
 }
 

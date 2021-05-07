@@ -1,5 +1,6 @@
 const reader = require('./sources/reader');
-const reportCreator = require('./sources/report-creator');
+const ReportCreator = require('./sources/report-creator');
+const reportCreator = new ReportCreator()
 
 const settingsFile = "Splitter_settings.xlsx";
 const settingsSheet = "Settings";

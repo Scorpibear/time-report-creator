@@ -25,4 +25,16 @@ describe('report-creator', () => {
     reportCreator.createReport("project name", [tabInfo], settings, timeData);
     expect(formatter.applySummaryRowFormat).toBeCalled();
   });
+  it('use sum() formula for summary row on a tab', () => {
+    let ws = reportCreator.createTab(tabInfo, timeData);
+    expect(ws["D3"].f).toBe("SUM(D2:D2)");
+  })
+  it('summary uses reference to spent time cell of each tab', () => {
+    let ws = reportCreator.createSummary([tabInfo], timeData);
+    expect(ws["B2"].f).toBe("testTabName!D3");
+  });
+  it('use sum() formula to sum all tabs info', () => {
+    let ws = reportCreator.createSummary([tabInfo, tabInfo], timeData);
+    expect(ws["B4"].f).toBe("SUM(B2:B3)");
+  });
 })

@@ -49,10 +49,10 @@ class ReportCreator {
       ws_data.push(row);
     });
     let summaryRow = ["Service Points spent"];
-    for(let i = 1; i < header.length - 1; i++) {
+    for(let i = 1; i < header.length; i++) {
       summaryRow.push("");
     }
-    summaryRow.push(tabTimeData.map(data => data["Hours"]).reduce((a, b) => (a + b), 0));
+
     ws_data.push(summaryRow)
     let ws = XLSX.utils.aoa_to_sheet(ws_data);
     const cols = ["A", "B", "C", "D"];
@@ -73,23 +73,15 @@ class ReportCreator {
     const ws_data = [
       [ "Activities",	"Service Points Spent"]
     ];
-    let total = 0;
-    tabs.forEach(tab => {
-      let spent = timeData.filter(({Tag}) => Tag == tab.tag).map(record => record.Hours).reduce((a, b) => (a + b), 0);
-      ws_data.push([tab.tabName, spent]);
-      total+= spent;
-      if(!spent){
-        console.error(`No time spent for project '${projectName}', tab '${tab.tabName}', tag '${tab.tag}'`);
-      }
-    })
-    ws_data.push([ "Total Service Points",	total])
+    tabs.forEach(tab => ws_data.push([tab.tabName, ""]));
+    ws_data.push([ "Total Service Points",	""])
 
     const ws = XLSX.utils.aoa_to_sheet(ws_data);
 
     tabs.forEach((tab, n) => {
       const cell = `B${n+2}`
       const lastRow = timeData.filter(({Tag}) => Tag == tab.tag).length + 2; // + header and summary
-      ws[cell].f = `${tab.tabName}!${getTabLastCol(tab)}${lastRow}`;
+      ws[cell].f = `'${tab.tabName}'!${getTabLastCol(tab)}${lastRow}`;
     });
 
     const totalSpentCell = `B${tabs.length + 2}`;

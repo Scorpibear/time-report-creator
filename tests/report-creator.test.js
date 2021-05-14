@@ -5,7 +5,7 @@ const Formatter = require('../sources/formatter');
 
 describe('report-creator', () => {
   const settings = {startDate: "2021-03-01", endDate: "2021-03-31"}
-  const tabInfo = {tag: 'testTag', tabName: 'testTabName'}
+  const tabInfo = {tag: 'testTag', tabName: 'test Tab Name'}
   const timeData = [{'Tag': 'testTag', 'Activity description': 'test activity', 'Date':42120, 'Hours': 3}]
   const formatter = new Formatter();
   const reportCreator = new ReportCreator(formatter);
@@ -31,7 +31,7 @@ describe('report-creator', () => {
   })
   it('summary uses reference to spent time cell of each tab', () => {
     let ws = reportCreator.createSummary([tabInfo], timeData);
-    expect(ws["B2"].f).toBe("testTabName!D3");
+    expect(ws["B2"].f).toBe("'test Tab Name'!D3");
   });
   it('use sum() formula to sum all tabs info', () => {
     let ws = reportCreator.createSummary([tabInfo, tabInfo], timeData);

@@ -3,7 +3,7 @@
 [![Coverage Status](https://codecov.io/gh/Scorpibear/time-report-creator/branch/main/graph/badge.svg)](https://codecov.io/gh/Scorpibear/time-report-creator)
 [![npm version](https://badge.fury.io/js/time-report-creator.svg)](https://www.npmjs.com/package/time-report-creator)
 
-RICPA client, client for Remote Chess Engine, implemented following RICPA protocol
+Time report creator, split activities logs by tags
 
 ## Install
 1. Install the recent [node.js](https://nodejs.org/en/) LTS version (once)

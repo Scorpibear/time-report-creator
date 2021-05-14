@@ -37,4 +37,20 @@ describe('report-creator', () => {
     let ws = reportCreator.createSummary([tabInfo, tabInfo], timeData);
     expect(ws["B4"].f).toBe("SUM(B2:B3)");
   });
+  it('has Package column in header if required', () => {
+    const header = reportCreator.getHeader(true);
+    expect(header).toContain("Package");
+  });
+  it('last column in case of Package is E', () => {
+    const cols = reportCreator.getColumns(true);
+    expect(cols[cols.length - 1]).toBe('E');
+  });
+  it('last column in case of no Package is D', () => {
+    const cols = reportCreator.getColumns(false);
+    expect(cols[cols.length - 1]).toBe('D');
+  });
+  it('if formatter is not specified the default is created', () => {
+    const rc = new ReportCreator();
+    expect(rc.formatter).toBeDefined();
+  })
 })

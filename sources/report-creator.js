@@ -34,8 +34,17 @@ class ReportCreator {
     return header;
   }
 
+  getColumns(isPackageRequired) {
+    const cols = ["A", "B", "C", "D"];
+    if(isPackageRequired) {
+      cols.push("E");
+    }
+    return cols;
+  }
+
   createTab(tabInfo, timeData) {
-    const header = this.getHeader(tabInfo.leavePackage == 'Y');
+    const isPackageRequired = tabInfo.leavePackage == 'Y';
+    const header = this.getHeader(isPackageRequired);
     const propertyMap = {
       "Service Points": (info) => info["Hours"],
       "Date": (info) => converter.formatDateFromDays(info["Date"])
@@ -55,10 +64,7 @@ class ReportCreator {
 
     ws_data.push(summaryRow)
     let ws = XLSX.utils.aoa_to_sheet(ws_data);
-    const cols = ["A", "B", "C", "D"];
-    if(header.length > 4) {
-      cols.push("E");
-    }
+    const cols = this.getColumns(isPackageRequired);
     const lastCol = cols[cols.length - 1];
     const servicePointSpentCell = `${lastCol}${ws_data.length}`;
     ws[servicePointSpentCell].f = `SUM(${lastCol}2:${lastCol}${ws_data.length-1})`

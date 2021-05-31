@@ -15,9 +15,6 @@ class Formatter {
   
   applyTabsHeaderFormat(cell) {
     this.applyHeaderFormat(cell);
-    if(!cell.s) {
-      cell.s = {}
-    }
     if(!cell.s.alignment) {
       cell.s.alignment = {}
     }
@@ -26,6 +23,11 @@ class Formatter {
 
   applySummaryRowFormat(cell) {
     this.makeBold(cell)
+  }
+
+  applySummaryHeaderFormat(cell) {
+    this.applyHeaderFormat(cell);
+    cell.s.border = {bottom: {style: "thin", color: { auto: 1}} }
   }
 }
 

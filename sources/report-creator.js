@@ -94,7 +94,7 @@ class ReportCreator {
     ws[totalSpentCell].f = `SUM(B2:B${tabs.length + 1})`;
     
     // apply formatting
-    ["A1","B1"].forEach(cell => this.formatter.applyHeaderFormat(ws[cell]));
+    ["A1","B1"].forEach(cell => this.formatter.applySummaryHeaderFormat(ws[cell]));
     ["A","B"].map(col => `${col}${ws_data.length}`).forEach(cell => this.formatter.applySummaryRowFormat(ws[cell]));
 
     return ws;

@@ -6,7 +6,11 @@ const Formatter = require('../sources/formatter');
 describe('report-creator', () => {
   const settings = {startDate: "2021-03-01", endDate: "2021-03-31"}
   const tabInfo = {tag: 'testTag', tabName: 'test Tab Name'}
-  const timeData = [{'Tag': 'testTag', 'Activity description': 'test activity', 'Date':42120, 'Hours': 3}]
+  const tabInfoWithPackage = {tag: 'tag2', tabName: 'tab2', leavePackage: 'Y'}
+  const timeData = [
+    {'Tag': 'testTag', 'Activity description': 'test activity', 'Date':42120, 'Hours': 3},
+    {'Tag': 'tag2', 'Activity description': 'test activity', 'Date':42120, 'Hours': 1}
+  ]
   const formatter = new Formatter();
   const reportCreator = new ReportCreator(formatter);
   
@@ -25,6 +29,11 @@ describe('report-creator', () => {
     reportCreator.createReport("project name", [tabInfo], settings, timeData);
     expect(formatter.applySummaryRowFormat).toBeCalled();
   });
+  it('applies summary header format for the first row of the summary', () => {
+    jest.spyOn(formatter, 'applySummaryHeaderFormat');
+    reportCreator.createReport('project name', [tabInfo], settings, timeData);
+    expect(formatter.applySummaryHeaderFormat).toBeCalled();
+  })
   it('use sum() formula for summary row on a tab', () => {
     let ws = reportCreator.createTab(tabInfo, timeData);
     expect(ws["D3"].f).toBe("SUM(D2:D2)");
@@ -33,6 +42,10 @@ describe('report-creator', () => {
     let ws = reportCreator.createSummary([tabInfo], timeData);
     expect(ws["B2"].f).toBe("'test Tab Name'!D3");
   });
+  it('summary references to E column data in case of package is left', () => {
+    let ws = reportCreator.createSummary([tabInfoWithPackage], timeData);
+    expect(ws["B2"].f).toBe("'tab2'!E3");
+  })
   it('use sum() formula to sum all tabs info', () => {
     let ws = reportCreator.createSummary([tabInfo, tabInfo], timeData);
     expect(ws["B4"].f).toBe("SUM(B2:B3)");

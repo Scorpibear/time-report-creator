@@ -14,6 +14,11 @@ describe('formatter', () => {
       formatter.applyTabsHeaderFormat(cell);
       expect(cell.s.font.name).toEqual('Calibri');
     })
+    test('leaves existent vertical alignment as is', () => {
+      const cell = {s: {alignment: {vertical: "top"}}};
+      formatter.applyTabsHeaderFormat(cell);
+      expect(cell.s.alignment.vertical).toEqual("top");
+    })
   })
   describe('applySummaryRowFormat', () => {
     test('marks it in bold font', () => {
@@ -22,5 +27,11 @@ describe('formatter', () => {
       expect(cell.s.font.bold).toBeTruthy();
     })
   })
-  
+  describe('applySummaryHeaderFormat', () => {
+    test('apply bottom border', () => {
+      const cell = {};
+      formatter.applySummaryHeaderFormat(cell);
+      expect(cell.s.border.bottom).toEqual({style: "thin", color: { auto: 1}})
+    })
+  })
 })

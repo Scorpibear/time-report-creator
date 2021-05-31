@@ -72,6 +72,9 @@ class ReportCreator {
     const summaryCells = cols.map(col => `${col}${ws_data.length}`);
     headerCells.forEach(cell => this.formatter.applyTabsHeaderFormat(ws[cell]));
     summaryCells.forEach(cell => this.formatter.applySummaryRowFormat(ws[cell]));
+
+    ws['!cols'] = this.formatter.getColumnsPropertiesForTab(isPackageRequired);
+
     return ws;
   }
 
@@ -96,6 +99,8 @@ class ReportCreator {
     // apply formatting
     ["A1","B1"].forEach(cell => this.formatter.applySummaryHeaderFormat(ws[cell]));
     ["A","B"].map(col => `${col}${ws_data.length}`).forEach(cell => this.formatter.applySummaryRowFormat(ws[cell]));
+
+    ws['!cols'] = this.formatter.getColumnsPropertiesForSummary();
 
     return ws;
   }

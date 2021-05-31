@@ -13,6 +13,7 @@ describe('report-creator', () => {
   ]
   const formatter = new Formatter();
   const reportCreator = new ReportCreator(formatter);
+  const colsProperties = [{width: 10}, {width: 20}];
   
   it('creates a book', () => {
     jest.spyOn(XLSX.utils, 'book_new');
@@ -34,22 +35,17 @@ describe('report-creator', () => {
     reportCreator.createReport('project name', [tabInfo], settings, timeData);
     expect(formatter.applySummaryHeaderFormat).toBeCalled();
   })
-  it('use sum() formula for summary row on a tab', () => {
-    let ws = reportCreator.createTab(tabInfo, timeData);
-    expect(ws["D3"].f).toBe("SUM(D2:D2)");
+  describe('createTab', () => {
+    it('use sum() formula for summary row on a tab', () => {
+      let ws = reportCreator.createTab(tabInfo, timeData);
+      expect(ws["D3"].f).toBe("SUM(D2:D2)");
+    })
+    it('get columns properties', () => {
+      jest.spyOn(formatter, 'getColumnsPropertiesForTab').mockReturnValue(colsProperties);
+      let ws = reportCreator.createTab(tabInfo, timeData);
+      expect(ws['!cols']).toBe(colsProperties);
+    })
   })
-  it('summary uses reference to spent time cell of each tab', () => {
-    let ws = reportCreator.createSummary([tabInfo], timeData);
-    expect(ws["B2"].f).toBe("'test Tab Name'!D3");
-  });
-  it('summary references to E column data in case of package is left', () => {
-    let ws = reportCreator.createSummary([tabInfoWithPackage], timeData);
-    expect(ws["B2"].f).toBe("'tab2'!E3");
-  })
-  it('use sum() formula to sum all tabs info', () => {
-    let ws = reportCreator.createSummary([tabInfo, tabInfo], timeData);
-    expect(ws["B4"].f).toBe("SUM(B2:B3)");
-  });
   it('has Package column in header if required', () => {
     const header = reportCreator.getHeader(true);
     expect(header).toContain("Package");
@@ -65,5 +61,24 @@ describe('report-creator', () => {
   it('if formatter is not specified the default is created', () => {
     const rc = new ReportCreator();
     expect(rc.formatter).toBeDefined();
+  })
+  describe('createSummary', () => {
+    it('summary uses reference to spent time cell of each tab', () => {
+      let ws = reportCreator.createSummary([tabInfo], timeData);
+      expect(ws["B2"].f).toBe("'test Tab Name'!D3");
+    });
+    it('summary references to E column data in case of package is left', () => {
+      let ws = reportCreator.createSummary([tabInfoWithPackage], timeData);
+      expect(ws["B2"].f).toBe("'tab2'!E3");
+    })
+    it('use sum() formula to sum all tabs info', () => {
+      let ws = reportCreator.createSummary([tabInfo, tabInfo], timeData);
+      expect(ws["B4"].f).toBe("SUM(B2:B3)");
+    });
+    it('specify the column properties', () => {
+      jest.spyOn(formatter, 'getColumnsPropertiesForSummary').mockReturnValue(colsProperties);
+      let ws = reportCreator.createSummary([tabInfo, tabInfo], timeData);
+      expect(ws['!cols']).toBe(colsProperties);
+    })
   })
 })

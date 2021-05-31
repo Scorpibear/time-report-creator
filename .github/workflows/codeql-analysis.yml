@@ -72,9 +72,7 @@ jobs:
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
-      
-    - name: Node Code Formatter
-      uses: MarvinJWendt/run-node-formatter@1.5.2
+
             
 
       

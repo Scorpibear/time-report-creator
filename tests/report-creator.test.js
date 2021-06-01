@@ -31,6 +31,16 @@ describe('report-creator', () => {
       reportCreator.createReport('project name', [tabInfo], settings, timeData);
       expect(formatter.applySummaryHeaderFormat).toBeCalled();
     })
+    it('creates tab for each tab with data', () => {
+      jest.spyOn(reportCreator, 'createTab');
+      reportCreator.createReport('project name', [tabInfo], settings, timeData);
+      expect(reportCreator.createTab).toBeCalled();
+    })
+    it('does not create sheet on empty data', () => {
+      jest.spyOn(XLSX.utils, 'book_append_sheet');
+      reportCreator.createReport('project name', [tabInfo], settings, []);
+      expect(XLSX.utils.book_append_sheet).not.toBeCalledWith(expect.anything(), expect.anything(), tabInfo.tabName);
+    })
   })
   describe('createTab', () => {
     it('applies summary row format for the last row on each tab', () => {
@@ -46,6 +56,9 @@ describe('report-creator', () => {
       jest.spyOn(formatter, 'getColumnsPropertiesForTab').mockReturnValue(colsProperties);
       let ws = reportCreator.createTab(tabInfo, timeData);
       expect(ws['!cols']).toBe(colsProperties);
+    })
+    it('returns null if no data', () => {
+      expect(reportCreator.createTab(tabInfo, [])).toBeNull();
     })
   })
   describe('getHeader', () => {

@@ -29,6 +29,19 @@ class Formatter {
     this.applyHeaderFormat(cell);
     cell.s.border = {bottom: {style: "thin", color: { auto: 1}} }
   }
+
+  getColumnsPropertiesForSummary() {
+    return [{ width: 28 }, { width: 19 }];
+  }
+
+  getColumnsPropertiesForTab(isPackageRequired) {
+    const props = [{width: 20}]
+    if(isPackageRequired) {
+      props.push({width: 24})
+    }
+    props.push({width: 80}, {width: 10}, {width: 13});
+    return props;
+  }
 }
 
 module.exports = Formatter;

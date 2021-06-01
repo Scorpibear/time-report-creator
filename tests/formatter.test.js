@@ -34,4 +34,12 @@ describe('formatter', () => {
       expect(cell.s.border.bottom).toEqual({style: "thin", color: { auto: 1}})
     })
   })
+  describe('getColumnsPropertiesForTab', () => {
+    test('return 5 column properties if package is required', () => {
+      expect(formatter.getColumnsPropertiesForTab(true).length).toBe(5);
+    })
+    test('return 4 column properties if package is NOT required', () => {
+      expect(formatter.getColumnsPropertiesForTab(false).length).toBe(4);
+    })
+  })
 })

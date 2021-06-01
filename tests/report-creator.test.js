@@ -15,27 +15,29 @@ describe('report-creator', () => {
   const reportCreator = new ReportCreator(formatter);
   const colsProperties = [{width: 10}, {width: 20}];
   
-  it('creates a book', () => {
-    jest.spyOn(XLSX.utils, 'book_new');
-    reportCreator.createReport("project name", [], settings, []);
-    expect(XLSX.utils.book_new).toBeCalled();
-  })
-  it('applies summary row format for the last row on each tab', () => {
-    jest.spyOn(formatter, 'applySummaryRowFormat');
-    reportCreator.createTab(tabInfo, timeData);
-    expect(formatter.applySummaryRowFormat).toBeCalled();
-  });
-  it('applies summary row format for the last row on the summary', () => {
-    jest.spyOn(formatter, 'applySummaryRowFormat');
-    reportCreator.createReport("project name", [tabInfo], settings, timeData);
-    expect(formatter.applySummaryRowFormat).toBeCalled();
-  });
-  it('applies summary header format for the first row of the summary', () => {
-    jest.spyOn(formatter, 'applySummaryHeaderFormat');
-    reportCreator.createReport('project name', [tabInfo], settings, timeData);
-    expect(formatter.applySummaryHeaderFormat).toBeCalled();
+  describe('createReport', () => {
+    it('creates a book', () => {
+      jest.spyOn(XLSX.utils, 'book_new');
+      reportCreator.createReport("project name", [], settings, []);
+      expect(XLSX.utils.book_new).toBeCalled();
+    })
+    it('applies summary row format for the last row on the summary', () => {
+      jest.spyOn(formatter, 'applySummaryRowFormat');
+      reportCreator.createReport("project name", [tabInfo], settings, timeData);
+      expect(formatter.applySummaryRowFormat).toBeCalled();
+    });
+    it('applies summary header format for the first row of the summary', () => {
+      jest.spyOn(formatter, 'applySummaryHeaderFormat');
+      reportCreator.createReport('project name', [tabInfo], settings, timeData);
+      expect(formatter.applySummaryHeaderFormat).toBeCalled();
+    })
   })
   describe('createTab', () => {
+    it('applies summary row format for the last row on each tab', () => {
+      jest.spyOn(formatter, 'applySummaryRowFormat');
+      reportCreator.createTab(tabInfo, timeData);
+      expect(formatter.applySummaryRowFormat).toBeCalled();
+    });
     it('use sum() formula for summary row on a tab', () => {
       let ws = reportCreator.createTab(tabInfo, timeData);
       expect(ws["D3"].f).toBe("SUM(D2:D2)");
@@ -46,18 +48,22 @@ describe('report-creator', () => {
       expect(ws['!cols']).toBe(colsProperties);
     })
   })
-  it('has Package column in header if required', () => {
-    const header = reportCreator.getHeader(true);
-    expect(header).toContain("Package");
-  });
-  it('last column in case of Package is E', () => {
-    const cols = reportCreator.getColumns(true);
-    expect(cols[cols.length - 1]).toBe('E');
-  });
-  it('last column in case of no Package is D', () => {
-    const cols = reportCreator.getColumns(false);
-    expect(cols[cols.length - 1]).toBe('D');
-  });
+  describe('getHeader', () => {
+    it('has Package column in header if required', () => {
+      const header = reportCreator.getHeader(true);
+      expect(header).toContain("Package");
+    });
+  })
+  describe('getColumns', () => {
+    it('last column in case of Package is E', () => {
+      const cols = reportCreator.getColumns(true);
+      expect(cols[cols.length - 1]).toBe('E');
+    });
+    it('last column in case of no Package is D', () => {
+      const cols = reportCreator.getColumns(false);
+      expect(cols[cols.length - 1]).toBe('D');
+    });
+  })
   it('if formatter is not specified the default is created', () => {
     const rc = new ReportCreator();
     expect(rc.formatter).toBeDefined();
@@ -79,6 +85,11 @@ describe('report-creator', () => {
       jest.spyOn(formatter, 'getColumnsPropertiesForSummary').mockReturnValue(colsProperties);
       let ws = reportCreator.createSummary([tabInfo, tabInfo], timeData);
       expect(ws['!cols']).toBe(colsProperties);
+    })
+    it('set 0 if no data provider', () => {
+      let ws = reportCreator.createSummary([tabInfo], []);
+      expect(ws["B2"].f).toBeUndefined();
+      expect(ws["B2"].v).toBe(0);
     })
   })
 })

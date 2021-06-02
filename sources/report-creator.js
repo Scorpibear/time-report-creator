@@ -10,6 +10,7 @@ class ReportCreator {
 
   createReport(projectName, tabs, settings, timeData) {
     const reportFileName = `${projectName}_${settings.startDate}_${settings.endDate}_report.xlsx`;
+    console.info(`Generating the report for '${projectName}'`);
     const wb = XLSX.utils.book_new();
 
     let ws = this.createSummary(tabs, timeData);
@@ -19,7 +20,9 @@ class ReportCreator {
     // create tabs
     tabs.forEach(tabInfo => {
       let tabWorkSheet = this.createTab(tabInfo, timeData);
-      XLSX.utils.book_append_sheet(wb, tabWorkSheet, tabInfo.tabName);
+      if(tabWorkSheet) {
+        XLSX.utils.book_append_sheet(wb, tabWorkSheet, tabInfo.tabName);
+      }
     });
 
     XLSX.writeFile(wb, reportFileName);
@@ -43,13 +46,16 @@ class ReportCreator {
   }
 
   createTab(tabInfo, timeData) {
+    let tabTimeData = timeData.filter(({Tag}) => Tag == tabInfo.tag);
+    if(tabTimeData.length == 0) {
+      return null;
+    }
     const isPackageRequired = tabInfo.leavePackage == 'Y';
     const header = this.getHeader(isPackageRequired);
     const propertyMap = {
       "Service Points": (info) => info["Hours"],
       "Date": (info) => converter.formatDateFromDays(info["Date"])
     };
-    let tabTimeData = timeData.filter(({Tag}) => Tag == tabInfo.tag);
     let ws_data = [header];
     tabTimeData.forEach(info => {
       let row = header.map(property => 
@@ -88,9 +94,16 @@ class ReportCreator {
     const ws = XLSX.utils.aoa_to_sheet(ws_data);
 
     tabs.forEach((tab, n) => {
-      const cell = `B${n+2}`
-      const lastRow = timeData.filter(({Tag}) => Tag == tab.tag).length + 2; // + header and summary
-      ws[cell].f = `'${tab.tabName}'!${getTabLastCol(tab)}${lastRow}`;
+      const cell = `B${n+2}`;
+      const itemsCount = timeData.filter(({Tag}) => Tag == tab.tag).length;
+      if(itemsCount) {
+        const lastRow = itemsCount + 2; // + header and summary
+        ws[cell].f = `'${tab.tabName}'!${getTabLastCol(tab)}${lastRow}`;
+      } else {
+        ws[cell].v = 0;
+        ws[cell].t = 'n';
+        console.error(`No data for '${tab.tabName}', '${tab.tag}'`);
+      }
     });
 
     const totalSpentCell = `B${tabs.length + 2}`;

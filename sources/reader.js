@@ -11,7 +11,6 @@ function readSettings(settingsFile, settingsSheet) {
     return;
   }
   const settingsData = XLSX.utils.sheet_to_json(settingsWorkbook.Sheets[settingsSheet]);
-  console.log('SettingsData:', settingsData);
   const settings = {};
   settings.timeFileName = settingsData[0].File + ".xlsx";
   settings.startDate = converter.formatDateFromDays(settingsData[0].Start);

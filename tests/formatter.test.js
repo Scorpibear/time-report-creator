@@ -27,6 +27,21 @@ describe('formatter', () => {
       expect(cell.s.font.bold).toBeTruthy();
     })
   })
+
+  describe('applyHeaderFormat', () => {
+    test('check for makeLightGreen has its color', () => {
+      const cell = {};
+      formatter.applyHeaderFormat(cell);
+      expect(cell.s.fill.fgColor.rgb).toEqual("D8E4BC");
+    })
+  })
+  describe('applySummaryRowFormat', () => {
+    test('check for makeLightGreen has its color', () => {
+      const cell = {};
+      formatter.applySummaryRowFormat(cell);
+      expect(cell.s.fill.fgColor.rgb).toEqual("D8E4BC");
+    })
+  })
   describe('applySummaryHeaderFormat', () => {
     test('apply bottom border', () => {
       const cell = {};
@@ -34,6 +49,7 @@ describe('formatter', () => {
       expect(cell.s.border.bottom).toEqual({style: "thin", color: { auto: 1}})
     })
   })
+
   describe('getColumnsPropertiesForTab', () => {
     test('return 5 column properties if package is required', () => {
       expect(formatter.getColumnsPropertiesForTab(true).length).toBe(5);

@@ -7,10 +7,25 @@ class Formatter {
     if(!cell.s.font) {
       cell.s.font = {}
     }
-    cell.s.font.bold = true
+    
+    cell.s.font.bold = true;
   }
+
+  makeLightGreen(cell){
+    if(!cell.s.fill){
+      cell.s.fill = {}
+    }
+    if(!cell.s.fill.fgColor){
+      cell.s.fill.fgColor = {};
+    }
+    cell.s.fill.fgColor.rgb = "D8E4BC";
+  }
+
+
   applyHeaderFormat(cell) {
     this.makeBold(cell)
+    this.makeLightGreen(cell)
+    
   }
   
   applyTabsHeaderFormat(cell) {
@@ -23,6 +38,7 @@ class Formatter {
 
   applySummaryRowFormat(cell) {
     this.makeBold(cell)
+    this.makeLightGreen(cell)
   }
 
   applySummaryHeaderFormat(cell) {

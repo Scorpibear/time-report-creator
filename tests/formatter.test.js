@@ -27,6 +27,13 @@ describe('formatter', () => {
       expect(cell.s.font.bold).toBeTruthy();
     })
   })
+  describe('applySummaryRowFormat', () => {
+    test('check for makeLightGreen has its color', () => {
+      const cell = {};
+      formatter.applySummaryRowFormat(cell);
+      expect(cell.s.fill.fgColor.rgb).toEqual("E2EFDA");
+    })
+  })
   describe('applySummaryHeaderFormat', () => {
     test('apply bottom border', () => {
       const cell = {};

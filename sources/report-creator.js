@@ -78,7 +78,6 @@ class ReportCreator {
     const summaryCells = cols.map(col => `${col}${ws_data.length}`);
     headerCells.forEach(cell => this.formatter.applyTabsHeaderFormat(ws[cell]));
     summaryCells.forEach(cell => this.formatter.applySummaryRowFormat(ws[cell]));
-
     ws['!cols'] = this.formatter.getColumnsPropertiesForTab(isPackageRequired);
 
     return ws;

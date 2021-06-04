@@ -18,7 +18,7 @@ class Formatter {
     if(!cell.s.fill.fgColor){
       cell.s.fill.fgColor = {};
     }
-    cell.s.fill.fgColor.rgb = "D8E4BC";
+    cell.s.fill.fgColor.rgb = "E2EFDA";
   }
 
 

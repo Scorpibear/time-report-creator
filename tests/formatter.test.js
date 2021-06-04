@@ -32,7 +32,7 @@ describe('formatter', () => {
     test('check for makeLightGreen has its color', () => {
       const cell = {};
       formatter.applySummaryRowFormat(cell);
-      expect(cell.s.fill.fgColor.rgb).toEqual("D8E4BC");
+      expect(cell.s.fill.fgColor.rgb).toEqual("E2EFDA");
     })
   })
   describe('applySummaryHeaderFormat', () => {

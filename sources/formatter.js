@@ -24,8 +24,6 @@ class Formatter {
 
   applyHeaderFormat(cell) {
     this.makeBold(cell)
-    this.makeLightGreen(cell)
-    
   }
   
   applyTabsHeaderFormat(cell) {

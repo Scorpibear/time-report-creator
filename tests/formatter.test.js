@@ -28,13 +28,6 @@ describe('formatter', () => {
     })
   })
 
-  describe('applyHeaderFormat', () => {
-    test('check for makeLightGreen has its color', () => {
-      const cell = {};
-      formatter.applyHeaderFormat(cell);
-      expect(cell.s.fill.fgColor.rgb).toEqual("D8E4BC");
-    })
-  })
   describe('applySummaryRowFormat', () => {
     test('check for makeLightGreen has its color', () => {
       const cell = {};

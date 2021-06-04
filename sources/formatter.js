@@ -15,12 +15,8 @@ class Formatter {
     if(!cell.s.fill){
       cell.s.fill = {}
     }
-    if(!cell.s.fill.fgColor){
-      cell.s.fill.fgColor = {};
-    }
-    cell.s.fill.fgColor.rgb = "E2EFDA";
+    cell.s.fill.fgColor = {rgb: "E2EFDA"};
   }
-
 
   applyHeaderFormat(cell) {
     this.makeBold(cell)

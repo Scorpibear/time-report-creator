@@ -27,7 +27,6 @@ describe('formatter', () => {
       expect(cell.s.font.bold).toBeTruthy();
     })
   })
-
   describe('applySummaryRowFormat', () => {
     test('check for makeLightGreen has its color', () => {
       const cell = {};
@@ -42,7 +41,6 @@ describe('formatter', () => {
       expect(cell.s.border.bottom).toEqual({style: "thin", color: { auto: 1}})
     })
   })
-
   describe('getColumnsPropertiesForTab', () => {
     test('return 5 column properties if package is required', () => {
       expect(formatter.getColumnsPropertiesForTab(true).length).toBe(5);

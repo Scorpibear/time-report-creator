@@ -1,4 +1,5 @@
 const reader = require('../sources/reader');
+const XLSX = require("sheetjs-style");
 
 describe('reader', () => {
   const sampleSettings = [{
@@ -27,4 +28,42 @@ describe('reader', () => {
       expect(projects.get("P11")[0]).toEqual({tabName: 'Tab1', tag: 'tagA', leavePackage: 'N'});
     })
   })
+  describe('checking readTimeBook function for error for false input file', () => {
+    const timeBook = reader.readTimeBook("Example Text");
+    expect(timeBook).toUndefined;
+  })
+  describe('checking readSettings function for error for false input file', () => {
+    const settingsFile = "Splitter_settingsFalse.xlsx";
+    const settingsSheet = "SettingsFalse";
+    const readSettings = reader.readSettings(settingsFile, settingsSheet);
+    expect(readSettings).toUndefined;
+  })
+  describe('readTimeBook', () => {
+    const timeFileN = {"Sheets":{"example2":"example"},"SheetNames":{"example2":"example"}};
+    const exampleText = "returned example text";
+    it('get timeData from readTimeBook', () => {
+      jest.spyOn(XLSX, 'readFile').mockReturnValue(timeFileN);
+      jest.spyOn(XLSX.utils, 'sheet_to_json').mockReturnValue(exampleText);
+      const returnedFromFunc = reader.readTimeBook(exampleText);
+      expect(returnedFromFunc).toBe(exampleText);
+    });
+  })
+  describe('readSettings', () => {
+  
+    const settingsFile = "Splitter_settings2.xlsx";
+    const settingsSheet = "example555";
+
+    const timeFileN = {"Sheets":{"Start":"david","End":"davit"},"SheetNames":{"example2":"example"}};
+    const exampleText = [{
+      File : "Filename",
+      Start: 5,
+      End: 10
+    }];
+    it('get settings from readSettings', () => {
+      jest.spyOn(XLSX, 'readFile').mockReturnValue(timeFileN);
+      jest.spyOn(XLSX.utils, 'sheet_to_json').mockReturnValue(exampleText);
+      const returnedFromFunc = reader.readSettings(settingsFile, settingsSheet);
+      expect(returnedFromFunc.timeFileName).toBe('Filename.xlsx');
+    });
+  }) 
 })

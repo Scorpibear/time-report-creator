@@ -99,6 +99,15 @@ describe('report-creator', () => {
       let ws = reportCreator.createSummary([tabInfo, tabInfo], timeData);
       expect(ws['!cols']).toBe(colsProperties);
     })
+    it('provide formatter the max length for activities', () => {
+      let tabInfo1 = {tag: tabInfo.tag, tabName: "12345678901234567890123"}
+      reportCreator.createSummary([tabInfo1], timeData)
+      expect(formatter.getColumnsPropertiesForSummary).toBeCalledWith(23)
+    })
+    it('if tab name is short, summary row text value is used for width', () => {
+      reportCreator.createSummary([tabInfo], timeData)
+      expect(formatter.getColumnsPropertiesForSummary).toBeCalledWith("Total Service Points".length);
+    });
     it('set 0 if no data provider', () => {
       let ws = reportCreator.createSummary([tabInfo], []);
       expect(ws["B2"].f).toBeUndefined();

@@ -40,8 +40,10 @@ class Formatter {
     cell.s.border = {bottom: {style: "thin", color: { auto: 1}} }
   }
 
-  getColumnsPropertiesForSummary() {
-    return [{ width: 28 }, { width: 19 }];
+  getColumnsPropertiesForSummary(activityMaxCharacters) {
+    let activitiesColProp = activityMaxCharacters ? { width: activityMaxCharacters * 0.9 } : { width: 28 };
+    let spentColProp = { width: 19 };
+    return [activitiesColProp, spentColProp];
   }
 
   getColumnsPropertiesForTab(isPackageRequired) {

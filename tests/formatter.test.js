@@ -41,6 +41,11 @@ describe('formatter', () => {
       expect(cell.s.border.bottom).toEqual({style: "thin", color: { auto: 1}})
     })
   })
+  describe('getColumnsPropertiesForSummary', () => {
+    test('uses width in characters for the first column with 0.9 coefficient', () => {
+      expect(formatter.getColumnsPropertiesForSummary(20)[0]).toEqual({width: 18});
+    })
+  })
   describe('getColumnsPropertiesForTab', () => {
     test('return 5 column properties if package is required', () => {
       expect(formatter.getColumnsPropertiesForTab(true).length).toBe(5);

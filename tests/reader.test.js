@@ -49,10 +49,8 @@ describe('reader', () => {
     });
   })
   describe('readSettings', () => {
-  
     const settingsFile = "Splitter_settings2.xlsx";
     const settingsSheet = "example555";
-
     const timeFileN = {"Sheets":{"Start":"david","End":"davit"},"SheetNames":{"example2":"example"}};
     const exampleText = [{
       File : "Filename",

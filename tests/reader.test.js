@@ -20,6 +20,16 @@ describe('reader', () => {
     Tag: 'p33_report',
     LeavePackage: 'Y'
   }];
+  const settingsFile = "Splitter_settingsFalse.xlsx";
+  const settingsSheet = "example555";
+  const timeFileChecker = {"Sheets":{
+    "Start":"david",
+    "End":"davit"
+  },
+  "SheetNames":[
+    "example2",
+    "example"
+  ]};
   describe('groupProjects', () => {
     test('groups project data in project->tabs format', () => {
       const projects = reader.groupProjects(sampleSettings);
@@ -33,35 +43,29 @@ describe('reader', () => {
     expect(timeBook).toUndefined;
   })
   describe('checking readSettings function for error for false input file', () => {
-    const settingsFile = "Splitter_settingsFalse.xlsx";
-    const settingsSheet = "SettingsFalse";
     const readSettings = reader.readSettings(settingsFile, settingsSheet);
     expect(readSettings).toUndefined;
   })
   describe('readTimeBook', () => {
-    const timeFileN = {"Sheets":{"example2":"example"},"SheetNames":{"example2":"example"}};
-    const exampleText = "returned example text";
+    const textFromSheetToJson = "returned example text";
     it('get timeData from readTimeBook', () => {
-      jest.spyOn(XLSX, 'readFile').mockReturnValue(timeFileN);
-      jest.spyOn(XLSX.utils, 'sheet_to_json').mockReturnValue(exampleText);
-      const returnedFromFunc = reader.readTimeBook(exampleText);
-      expect(returnedFromFunc).toBe(exampleText);
+      jest.spyOn(XLSX, 'readFile').mockReturnValue(timeFileChecker);
+      jest.spyOn(XLSX.utils, 'sheet_to_json').mockReturnValue(textFromSheetToJson);
+      const timeData = reader.readTimeBook(textFromSheetToJson);
+      expect(timeData).toBe(textFromSheetToJson); 
     });
   })
   describe('readSettings', () => {
-    const settingsFile = "Splitter_settings2.xlsx";
-    const settingsSheet = "example555";
-    const timeFileN = {"Sheets":{"Start":"david","End":"davit"},"SheetNames":{"example2":"example"}};
-    const exampleText = [{
+    const TimeDataFile = [{
       File : "Filename",
       Start: 5,
-      End: 10
+      End: 10 
     }];
     it('get settings from readSettings', () => {
-      jest.spyOn(XLSX, 'readFile').mockReturnValue(timeFileN);
-      jest.spyOn(XLSX.utils, 'sheet_to_json').mockReturnValue(exampleText);
-      const returnedFromFunc = reader.readSettings(settingsFile, settingsSheet);
-      expect(returnedFromFunc.timeFileName).toBe('Filename.xlsx');
+      jest.spyOn(XLSX, 'readFile').mockReturnValue(timeFileChecker);
+      jest.spyOn(XLSX.utils, 'sheet_to_json').mockReturnValue(TimeDataFile);
+      const settings = reader.readSettings(settingsFile, settingsSheet);
+      expect(settings.timeFileName).toBe('Filename.xlsx');
     });
   }) 
 })

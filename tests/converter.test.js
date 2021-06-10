@@ -19,4 +19,4 @@ describe('converter', () => {
     // could be different dates due to local timezone 
     expect(converter.formatDateFromDays(3)).toMatch("1900-01-");
   })
-})
+}) 

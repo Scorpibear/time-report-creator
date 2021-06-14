@@ -15,6 +15,11 @@ describe('report-creator', () => {
   const reportCreator = new ReportCreator(formatter);
   const colsProperties = [{width: 10}, {width: 20}];
   
+  beforeAll(() => {
+    // to reduce console noise during tests
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+    jest.spyOn(console, 'info').mockImplementation(() => {});
+  });
   describe('createReport', () => {
     it('creates a book', () => {
       jest.spyOn(XLSX.utils, 'book_new');

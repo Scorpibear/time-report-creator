@@ -112,7 +112,8 @@ class ReportCreator {
     ["A1","B1"].forEach(cell => this.formatter.applySummaryHeaderFormat(ws[cell]));
     ["A","B"].map(col => `${col}${ws_data.length}`).forEach(cell => this.formatter.applySummaryRowFormat(ws[cell]));
 
-    ws['!cols'] = this.formatter.getColumnsPropertiesForSummary();
+    let activitiesMaxWidth = ws_data.reduce((maxWidth, rowData) => Math.max(maxWidth, rowData[0].length), 0);
+    ws['!cols'] = this.formatter.getColumnsPropertiesForSummary(activitiesMaxWidth);
 
     return ws;
   }

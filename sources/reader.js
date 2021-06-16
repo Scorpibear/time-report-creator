@@ -29,7 +29,7 @@ function groupProjects(settingsData) {
     } else {
       projects.set(ProjectName, [tabInfo]);
     }
-  })
+  }) 
   return projects;
 }
 

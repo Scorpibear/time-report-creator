@@ -27,6 +27,13 @@ describe('formatter', () => {
       expect(cell.s.font.bold).toBeTruthy();
     })
   })
+  describe('Make bold style check', () => {
+    test('font->bold is True', () => {
+      const cell = {};
+      formatter.makeBold(cell);
+      expect(cell.s.font.bold).toBeTruthy();
+    })
+  })
   describe('applySummaryRowFormat', () => {
     test('check for makeLightGreen has its color', () => {
       const cell = {};

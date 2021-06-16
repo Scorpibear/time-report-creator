@@ -59,7 +59,7 @@ describe('report-creator', () => {
     })
     it('returns null if no data', () => {
       expect(reportCreator.createTab(tabInfo, [])).toBeNull();
-    }) 
+    })
   })
   describe('getHeader', () => {
     it('has Package column in header if required', () => {

@@ -74,7 +74,7 @@ describe('report-creator', () => {
       reportCreator.createTab(testTabInfo, testTimeData);
       expect(formatter.getColumnsProperties).toBeCalledWith([
         ['Employee','Package','Activity description','Date','Service Points'],
-        ['short one','short','test activity','2015-04-26', 1],
+        ['short one','short','test activity',expect.anything(), 1],
         ['Service Points spent','','','','']
       ]);
     })

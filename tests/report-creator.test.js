@@ -8,8 +8,8 @@ describe('report-creator', () => {
   const tabInfo = {tag: 'testTag', tabName: 'test Tab Name'}
   const tabInfoWithPackage = {tag: 'tag2', tabName: 'tab2', leavePackage: 'Y'}
   const timeData = [
-    {'Tag': 'testTag', 'Activity description': 'test activity', 'Date':42120, 'Hours': 3},
-    {'Tag': 'tag2', 'Activity description': 'test activity', 'Date':42120, 'Hours': 1}
+    {'Tag': 'testTag', 'Activity description': 'test activity', 'Date':42120, 'Hours': 3, 'Employee': 'N1 S1'},
+    {'Tag': 'tag2', 'Activity description': 'test activity', 'Date':42120, 'Hours': 1, 'Employee': 'N2 S2'}
   ]
   const formatter = new Formatter();
   const reportCreator = new ReportCreator(formatter);
@@ -17,8 +17,8 @@ describe('report-creator', () => {
   
   beforeAll(() => {
     // to reduce console noise during tests
-    jest.spyOn(console, 'error').mockImplementation(() => {});
-    jest.spyOn(console, 'info').mockImplementation(() => {});
+    jest.spyOn(console, 'error').mockImplementation(() => {/*to mute noise in tests*/});
+    jest.spyOn(console, 'info').mockImplementation(() => {/*to mute noise in tests*/});
   });
   describe('createReport', () => {
     it('creates a book', () => {
@@ -57,13 +57,26 @@ describe('report-creator', () => {
       let ws = reportCreator.createTab(tabInfo, timeData);
       expect(ws["D3"].f).toBe("SUM(D2:D2)");
     })
-    it('get columns properties', () => {
-      jest.spyOn(formatter, 'getColumnsPropertiesForTab').mockReturnValue(colsProperties);
+    it('assign columns properties', () => {
+      jest.spyOn(formatter, 'getColumnsProperties').mockReturnValue(colsProperties);
       let ws = reportCreator.createTab(tabInfo, timeData);
       expect(ws['!cols']).toBe(colsProperties);
     })
     it('returns null if no data', () => {
       expect(reportCreator.createTab(tabInfo, [])).toBeNull();
+    })
+    it('provide formatter the data for all columns to calc cols size', () => {
+      const testTabInfo = {tag: 'testTag', tabName: 'tab2', leavePackage: 'Y'}
+      const testTimeData = [
+        {'Tag': 'testTag', 'Employee': 'short one', 'Activity description': 'test activity', 'Package': 'short', 'Date':42120, 'Hours': 1}
+      ]
+      spyOn(formatter, 'getColumnsProperties');
+      reportCreator.createTab(testTabInfo, testTimeData);
+      expect(formatter.getColumnsProperties).toBeCalledWith([
+        ['Employee','Package','Activity description','Date','Service Points'],
+        ['short one','short','test activity',expect.anything(), 1],
+        ['Service Points spent','','','','']
+      ]);
     })
   })
   describe('getHeader', () => {
@@ -100,19 +113,18 @@ describe('report-creator', () => {
       expect(ws["B4"].f).toBe("SUM(B2:B3)");
     });
     it('specify the column properties', () => {
-      jest.spyOn(formatter, 'getColumnsPropertiesForSummary').mockReturnValue(colsProperties);
+      jest.spyOn(formatter, 'getColumnsProperties').mockReturnValue(colsProperties);
       let ws = reportCreator.createSummary([tabInfo, tabInfo], timeData);
       expect(ws['!cols']).toBe(colsProperties);
     })
-    it('provide formatter the max length for activities', () => {
-      let tabInfo1 = {tag: tabInfo.tag, tabName: "12345678901234567890123"}
+    it('provide formatter the data to get columns properties', () => {
+      jest.spyOn(formatter, 'getColumnsProperties');
+      let tabInfo1 = {tag: tabInfo.tag, tabName: "TestTabNameCouldBeLongEnough"}
       reportCreator.createSummary([tabInfo1], timeData)
-      expect(formatter.getColumnsPropertiesForSummary).toBeCalledWith(23)
+      expect(formatter.getColumnsProperties).toBeCalledWith([
+        ['Activities', 'Service Points Spent'],['TestTabNameCouldBeLongEnough',''],['Total Service Points','']
+      ]);
     })
-    it('if tab name is short, summary row text value is used for width', () => {
-      reportCreator.createSummary([tabInfo], timeData)
-      expect(formatter.getColumnsPropertiesForSummary).toBeCalledWith("Total Service Points".length);
-    });
     it('set 0 if no data provider', () => {
       let ws = reportCreator.createSummary([tabInfo], []);
       expect(ws["B2"].f).toBeUndefined();

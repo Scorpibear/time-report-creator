@@ -48,17 +48,28 @@ describe('formatter', () => {
       expect(cell.s.border.bottom).toEqual({style: "thin", color: { auto: 1}})
     })
   })
-  describe('getColumnsPropertiesForSummary', () => {
-    test('uses width in characters for the first column with 0.9 coefficient', () => {
-      expect(formatter.getColumnsPropertiesForSummary(20)[0]).toEqual({width: 18});
+  describe('getColumnsProperties', () => {
+    test('uses width in characters', () => {
+      expect(formatter.getColumnsProperties([['12345678901234567890']])[0]).toEqual({wch: 20});
+    })
+    test('return same # of column properties as input data', () => {
+      expect(formatter.getColumnsProperties([['c1','c2','c3','c4','c5']]).length).toBe(5);
+    })
+    test('returns empty array for empty data', () => {
+      expect(formatter.getColumnsProperties([])).toEqual([]);
+    })
+    test('undefined values does not contribute to column width', () => {
+      expect(formatter.getColumnsProperties([['myData'],[undefined]])).toEqual([{wch: 6}]);
+    })
+    test('numbers does not change the column width', () => {
+      expect(formatter.getColumnsProperties([['myData'],[5]])).toEqual([{wch: 6}])
     })
   })
-  describe('getColumnsPropertiesForTab', () => {
-    test('return 5 column properties if package is required', () => {
-      expect(formatter.getColumnsPropertiesForTab(true).length).toBe(5);
-    })
-    test('return 4 column properties if package is NOT required', () => {
-      expect(formatter.getColumnsPropertiesForTab(false).length).toBe(4);
+  describe('makeLightGreen', () => {
+    test('does not modify other properties of fill object', () => {
+      const cell = {s: {fill: {patternType: "none"}}};
+      formatter.makeLightGreen(cell);
+      expect(cell.s.fill.patternType).toEqual("none");
     })
   })
 })

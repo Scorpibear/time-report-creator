@@ -40,19 +40,23 @@ class Formatter {
     cell.s.border = {bottom: {style: "thin", color: { auto: 1}} }
   }
 
-  getColumnsPropertiesForSummary(activityMaxCharacters) {
-    let activitiesColProp = activityMaxCharacters ? { width: activityMaxCharacters * 0.9 } : { width: 28 };
-    let spentColProp = { width: 19 };
-    return [activitiesColProp, spentColProp];
+  /**
+   * Get columns properties
+   *
+   * @param {Array<Array<String>>} data 
+   * @returns {Array<{width: Number}>} data for columns properties
+   */
+  getColumnsProperties(data) {
+    return data.length ?
+      data[0].map((colName, index) => 
+        ({ wch: data.reduce((maxWidth, rowData) => 
+          Math.max(maxWidth, typeof(rowData[index]) === 'string' ? rowData[index].length : 0), 0) * this.getAutoSizeCoefficient()
+        })
+      ) : [];
   }
 
-  getColumnsPropertiesForTab(isPackageRequired) {
-    const props = [{width: 20}]
-    if(isPackageRequired) {
-      props.push({width: 24})
-    }
-    props.push({width: 80}, {width: 10}, {width: 13});
-    return props;
+  getAutoSizeCoefficient() {
+    return 1;
   }
 }
 

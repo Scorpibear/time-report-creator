@@ -78,8 +78,7 @@ class ReportCreator {
     const summaryCells = cols.map(col => `${col}${ws_data.length}`);
     headerCells.forEach(cell => this.formatter.applyTabsHeaderFormat(ws[cell]));
     summaryCells.forEach(cell => this.formatter.applySummaryRowFormat(ws[cell]));
-    ws['!cols'] = this.formatter.getColumnsPropertiesForTab(isPackageRequired);
-
+    ws['!cols'] = this.formatter.getColumnsProperties(ws_data);
     return ws;
   }
 
@@ -112,8 +111,7 @@ class ReportCreator {
     ["A1","B1"].forEach(cell => this.formatter.applySummaryHeaderFormat(ws[cell]));
     ["A","B"].map(col => `${col}${ws_data.length}`).forEach(cell => this.formatter.applySummaryRowFormat(ws[cell]));
 
-    let activitiesMaxWidth = ws_data.reduce((maxWidth, rowData) => Math.max(maxWidth, rowData[0].length), 0);
-    ws['!cols'] = this.formatter.getColumnsPropertiesForSummary(activitiesMaxWidth);
+    ws['!cols'] = this.formatter.getColumnsProperties(ws_data);
 
     return ws;
   }

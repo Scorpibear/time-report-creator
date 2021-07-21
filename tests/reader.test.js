@@ -20,7 +20,6 @@ describe('reader', () => {
     Tag: 'p33_report',
     LeavePackage: 'Y'
   }];
-  const settingsFile = "Splitter_settingsFalse.xlsx";
   const settingsSheet = "example555";
   const timeFileChecker = {"Sheets":{
     "Start":"10",
@@ -29,20 +28,23 @@ describe('reader', () => {
   "SheetNames":[
     "input"
   ]};
+  beforeAll(() => {
+    jest.spyOn(console, 'error').mockImplementation(() => { /* to mute console noise in negative tests */ });
+  })
   describe('groupProjects', () => {
-    test('groups project data in project->tabs format', () => {
+    it('groups project data in project->tabs format', () => {
       const projects = reader.groupProjects(sampleSettings);
       expect(projects.has("P11")).toBeTruthy();
       expect(projects.get("P11")).toHaveProperty('length');
       expect(projects.get("P11")[0]).toEqual({tabName: 'Tab1', tag: 'tagA', leavePackage: 'N'});
     })
   })
-  describe('checking readTimeBook function for error for false input file', () => {
+  it('checking readTimeBook function for error for false input file', () => {
     const timeBook = reader.readTimeBook("Non-existent filename");
     expect(timeBook).toUndefined;
   })
-  describe('checking readSettings function for error for false input file', () => {
-    const readSettings = reader.readSettings(settingsFile, settingsSheet);
+  it('checking readSettings function for error for false input file', () => {
+    const readSettings = reader.readSettings("Unexistent_settings.xlsx", settingsSheet);
     expect(readSettings).toUndefined;
   })
   describe('readTimeBook', () => {
@@ -71,7 +73,7 @@ describe('reader', () => {
     it('get settings from readSettings', () => {
       jest.spyOn(XLSX, 'readFile').mockReturnValue(timeFileChecker);
       jest.spyOn(XLSX.utils, 'sheet_to_json').mockReturnValue(timeDataFile);
-      const settings = reader.readSettings(settingsFile, settingsSheet);
+      const settings = reader.readSettings("Settings.xlsx", settingsSheet);
       expect(settings.timeFileName).toBe('Filename.xlsx');
     });
   }) 

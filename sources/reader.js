@@ -41,8 +41,7 @@ function readTimeBook(timeFileName) {
     console.error(`Cound not read the time file '${timeFileName}'`)
     return;
   }
-  const timeData = XLSX.utils.sheet_to_json(timeWorkbook.Sheets[timeWorkbook.SheetNames[0]]);
-  return timeData;
+  return XLSX.utils.sheet_to_json(timeWorkbook.Sheets[timeWorkbook.SheetNames[0]]);
 }
 
 module.exports = {readSettings, readTimeBook, groupProjects};

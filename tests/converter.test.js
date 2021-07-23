@@ -12,10 +12,9 @@ describe('converter', () => {
     expect(converter.formatDate("2021-n-31")).toBe("2021-n-31");
   })
   test('formatDateToUSFromDays', () => {
-    expect(converter.formatDateToUSFromDays(2)).toBe("1/2/1900");
+    expect(converter.formatDateToUSFromDays(2)).toBe("1/1/1900");
   })
   test('formatDateFromDays use formatDate', () => {
-    // could be different dates due to local timezone 
-    expect(converter.formatDateFromDays(3)).toMatch("1900-01-");
+    expect(converter.formatDateFromDays(3)).toMatch("1900-01-02");
   })
 }) 

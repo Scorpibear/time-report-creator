@@ -16,6 +16,6 @@ function formatDateToUSFromDays(days) {
   return date.toLocaleDateString("en-us");
 }
 
-const days2date = days => new Date(0, 0, days);
+const days2date = days => new Date(Date.UTC(0, 0, days - 1));
 
 module.exports = {formatDate, formatDateFromDays, formatDateToUSFromDays}

@@ -1,6 +1,6 @@
 {
   "name": "time-report-creator",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "time report creator using split by tags",
   "main": "main.js",
   "scripts": {

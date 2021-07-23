@@ -20,17 +20,17 @@ describe('reader', () => {
     Tag: 'p33_report',
     LeavePackage: 'Y'
   }];
-  const settingsSheet = "example555";
-  const timeFileChecker = {"Sheets":{
+  const settingsSheet = "Settings";
+  const sampleWorkbookData = {"Sheets":{
     "Start":"10",
     "End":"20"
   },
   "SheetNames":[
     "input"
   ]};
-  beforeAll(() => {
+  const muteConsole = () => {
     jest.spyOn(console, 'error').mockImplementation(() => { /* to mute console noise in negative tests */ });
-  })
+  }
   describe('groupProjects', () => {
     it('groups project data in project->tabs format', () => {
       const projects = reader.groupProjects(sampleSettings);
@@ -40,6 +40,7 @@ describe('reader', () => {
     })
   })
   it('checking readTimeBook function for error for false input file', () => {
+    muteConsole();
     const timeBook = reader.readTimeBook("Non-existent filename");
     expect(timeBook).toUndefined;
   })
@@ -58,7 +59,7 @@ describe('reader', () => {
         w: 'Employee'
       }};
     it('get timeData from readTimeBook', () => {
-      jest.spyOn(XLSX, 'readFile').mockReturnValue(timeFileChecker);
+      jest.spyOn(XLSX, 'readFile').mockReturnValue(sampleWorkbookData);
       jest.spyOn(XLSX.utils, 'sheet_to_json').mockReturnValue(obJectFromSheetToJson);
       const timeData = reader.readTimeBook(obJectFromSheetToJson);
       expect(timeData).toBe(obJectFromSheetToJson); 
@@ -71,10 +72,27 @@ describe('reader', () => {
       End: 10 
     }];
     it('get settings from readSettings', () => {
-      jest.spyOn(XLSX, 'readFile').mockReturnValue(timeFileChecker);
+      jest.spyOn(XLSX, 'readFile').mockReturnValue(sampleWorkbookData);
       jest.spyOn(XLSX.utils, 'sheet_to_json').mockReturnValue(timeDataFile);
       const settings = reader.readSettings("Settings.xlsx", settingsSheet);
       expect(settings.timeFileName).toBe('Filename.xlsx');
     });
+    it('read startDate correctly', () => {
+      const sheetData = [
+        {
+          File: 'input',
+          Start: 44348,
+          End: 44377,
+          ProjectName: 'P1',
+          TabName: 'data',
+          Tag: 'p1_data_001',
+          LeavePackage: 'Y'
+        }
+      ];
+      jest.spyOn(XLSX, 'readFile').mockReturnValue(sampleWorkbookData);
+      jest.spyOn(XLSX.utils, 'sheet_to_json').mockReturnValue(sheetData);
+      const settings = reader.readSettings('SomeSettingsFile.xlsx', settingsSheet)
+      expect(settings.startDate).toBe('2021-06-01');
+    })
   }) 
 })

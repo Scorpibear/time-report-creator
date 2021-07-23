@@ -11,11 +11,13 @@ function formatDateFromDays(days) {
   return formatDate(days2date(days));
 }
 
+const addZeros = num => String(num).padStart(2, '0');
+
 function formatDateToUSFromDays(days) {
   const date = days2date(days);
-  return date.toLocaleDateString("en-us");
+  return `${addZeros(date.getUTCMonth() + 1)}/${addZeros(date.getUTCDate())}/${date.getUTCFullYear()}`;
 }
 
-const days2date = days => new Date(0, 0, days);
+const days2date = days => new Date(Date.UTC(0, 0, days - 1));
 
 module.exports = {formatDate, formatDateFromDays, formatDateToUSFromDays}

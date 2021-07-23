@@ -54,7 +54,7 @@ class ReportCreator {
     const header = this.getHeader(isPackageRequired);
     const propertyMap = {
       "Service Points": (info) => info["Hours"],
-      "Date": (info) => converter.formatDateFromDays(info["Date"])
+      "Date": (info) => converter.formatDateToUSFromDays(info["Date"])
     };
     let ws_data = [header];
     tabTimeData.forEach(info => {
